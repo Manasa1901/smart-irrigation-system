@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard | Irrigation System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body style="background-color:#f0f8ff;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">🌿 Irrigation Admin</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h2>Welcome, <b>Admin</b> 👑</h2>
+        <p class="text-muted">Manage fields, irrigation schedules, and water logs efficiently.</p>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg p-4 border-0">
+                <h5>🌾 Manage Fields</h5>
+                <p class="text-muted">View and edit all field details.</p>
+                <a th:href="@{/fields}" class="btn btn-outline-primary btn-sm">Go</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg p-4 border-0">
+                <h5>🕒 Manage Schedules</h5>
+                <p class="text-muted">Set irrigation timings for fields.</p>
+                <a th:href="@{/schedules}" class="btn btn-outline-primary btn-sm">Go</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg p-4 border-0">
+                <h5>💧 Water Logs</h5>
+                <p class="text-muted">Monitor irrigation activity logs.</p>
+                <a th:href="@{/waterlogs}" class="btn btn-outline-primary btn-sm">Go</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
