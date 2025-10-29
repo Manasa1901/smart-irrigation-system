@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: body">
+<body>
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>🕒 Irrigation Schedules</h3>
+        <a th:href="@{/schedules/new}" class="btn btn-primary">+ Add Schedule</a>
+    </div>
+
+    <table class="table table-hover align-middle">
+        <thead class="table-primary">
+        <tr>
+            <th>ID</th>
+            <th>Field</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Water (L)</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="schedule : ${schedules}">
+            <td th:text="${schedule.id}"></td>
+            <td th:text="${schedule.field.name}"></td>
+            <td th:text="${#temporals.format(schedule.startTime, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${#temporals.format(schedule.endTime, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${schedule.waterAmount}"></td>
+            <td>
+                <span th:text="${schedule.status}" class="badge bg-info text-dark"></span>
+            </td>
+            <td>
+                <a th:href="@{'/schedules/edit/' + ${schedule.id}}" class="btn btn-sm btn-warning">Edit</a>
+                <a th:href="@{'/schedules/delete/' + ${schedule.id}}" class="btn btn-sm btn-danger"
+                   th:onclick="'confirmDelete(event, \'Schedule #' + ${schedule.id} + '\')'">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

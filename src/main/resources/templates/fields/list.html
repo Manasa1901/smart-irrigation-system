@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: body">
+<body>
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>🌾 Fields</h3>
+        <a th:href="@{/fields/new}" class="btn btn-primary">+ Add Field</a>
+    </div>
+
+    <table class="table table-hover align-middle">
+        <thead class="table-primary">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Crop Type</th>
+            <th>Soil Type</th>
+            <th>Area (acres)</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="field : ${fields}">
+            <td th:text="${field.id}"></td>
+            <td th:text="${field.name}"></td>
+            <td th:text="${field.cropType}"></td>
+            <td th:text="${field.soilType}"></td>
+            <td th:text="${field.area}"></td>
+            <td>
+                <a th:href="@{'/fields/edit/' + ${field.id}}" class="btn btn-sm btn-warning">Edit</a>
+                <a th:href="@{'/fields/delete/' + ${field.id}}" class="btn btn-sm btn-danger"
+                   th:onclick="'confirmDelete(event, \'' + ${field.name} + '\')'">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

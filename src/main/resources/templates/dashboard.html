@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: body">
+<body>
+<h3 class="mb-4">📊 Dashboard Overview</h3>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h5>Total Fields</h5>
+            <h2 th:text="${fieldCount}">5</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h5>Upcoming Schedules</h5>
+            <h2 th:text="${scheduleCount}">3</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h5>Recent Logs</h5>
+            <h2 th:text="${logCount}">8</h2>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4 p-4">
+    <h4>💦 Water Usage Trend</h4>
+    <canvas id="waterChart" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('waterChart');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: /*[[${chartLabels}]]*/ ["Mon","Tue","Wed","Thu","Fri"],
+            datasets: [{
+                label: 'Water Usage (L)',
+                data: /*[[${chartValues}]]*/ [120, 90, 150, 80, 100],
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0,123,255,0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: true, position: 'top' } }
+        }
+    });
+</script>
+</body>
+</html>

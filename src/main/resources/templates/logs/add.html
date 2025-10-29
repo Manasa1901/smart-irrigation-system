@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: body">
+<body>
+<div class="card p-4 col-md-8 mx-auto">
+    <h3 class="mb-3">Add New Water Log</h3>
+
+    <form th:action="@{/logs}" th:object="${log}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Select Field</label>
+            <select class="form-select" th:field="*{field}" required>
+                <option th:each="field : ${fields}" th:value="${field}" th:text="${field.name}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Water Volume (L)</label>
+            <input type="number" class="form-control" th:field="*{waterVolume}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Notes (Optional)</label>
+            <textarea class="form-control" rows="3" th:field="*{notes}"></textarea>
+        </div>
+
+        <button class="btn btn-primary w-100">Save Log</button>
+    </form>
+</div>
+</body>
+</html>
