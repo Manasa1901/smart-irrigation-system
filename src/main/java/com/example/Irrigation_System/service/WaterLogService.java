@@ -16,23 +16,40 @@ public class WaterLogService {
         this.waterLogRepository = waterLogRepository;
     }
 
+    // Get all logs
     public List<WaterLog> getAllLogs() {
         return waterLogRepository.findAll();
     }
 
+    // Get one log
     public Optional<WaterLog> getLogById(Long id) {
         return waterLogRepository.findById(id);
     }
 
-    public List<WaterLog> getLogsByFieldId(Long fieldId) {
-        return waterLogRepository.findByFieldId(fieldId);
-    }
-
+    // Save a new log
     public WaterLog saveLog(WaterLog log) {
         return waterLogRepository.save(log);
     }
 
+    // Update log
+    public WaterLog updateLog(Long id, WaterLog updatedLog) {
+        return waterLogRepository.findById(id)
+                .map(existing -> {
+                    existing.setWaterVolume(updatedLog.getWaterVolume());
+                    existing.setLogTime(updatedLog.getLogTime());
+                    existing.setNotes(updatedLog.getNotes());
+                    existing.setField(updatedLog.getField());
+                    return waterLogRepository.save(existing);
+                })
+                .orElseThrow(() -> new RuntimeException("WaterLog not found with id " + id));
+    }
+
+    // Delete log
     public void deleteLog(Long id) {
-        waterLogRepository.deleteById(id);
+        if (waterLogRepository.existsById(id)) {
+            waterLogRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("WaterLog not found with id " + id);
+        }
     }
 }

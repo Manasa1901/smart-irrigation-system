@@ -2,49 +2,52 @@ package com.example.Irrigation_System.controller;
 
 import com.example.Irrigation_System.entity.WaterLog;
 import com.example.Irrigation_System.service.WaterLogService;
-import com.example.Irrigation_System.service.FieldService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/logs")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/waterlogs")
+@CrossOrigin(origins = "*")
 public class WaterLogController {
 
     private final WaterLogService waterLogService;
-    private final FieldService fieldService;
 
-    public WaterLogController(WaterLogService waterLogService, FieldService fieldService) {
+    public WaterLogController(WaterLogService waterLogService) {
         this.waterLogService = waterLogService;
-        this.fieldService = fieldService;
     }
 
-    // List all logs
+    // Get all water logs
     @GetMapping
-    public String listLogs(Model model) {
-        model.addAttribute("logs", waterLogService.getAllLogs());
-        return "logs/list"; // --> templates/logs/list.html
+    public ResponseEntity<List<WaterLog>> getAllLogs() {
+        return ResponseEntity.ok(waterLogService.getAllLogs());
     }
 
-    // Show form to add new log
-    @GetMapping("/new")
-    public String showAddForm(Model model) {
-        model.addAttribute("log", new WaterLog());
-        model.addAttribute("fields", fieldService.getAllFields());
-        return "logs/add";
+    // Get a single water log
+    @GetMapping("/{id}")
+    public ResponseEntity<WaterLog> getLogById(@PathVariable Long id) {
+        return waterLogService.getLogById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Save new log
+    // Create a new log
     @PostMapping
-    public String saveLog(@ModelAttribute("log") WaterLog log) {
-        waterLogService.saveLog(log);
-        return "redirect:/logs";
+    public ResponseEntity<WaterLog> createLog(@RequestBody WaterLog log) {
+        return ResponseEntity.ok(waterLogService.saveLog(log));
     }
 
-    // Delete log
-    @GetMapping("/delete/{id}")
-    public String deleteLog(@PathVariable Long id) {
+    // Update an existing log
+    @PutMapping("/{id}")
+    public ResponseEntity<WaterLog> updateLog(@PathVariable Long id, @RequestBody WaterLog updatedLog) {
+        return ResponseEntity.ok(waterLogService.updateLog(id, updatedLog));
+    }
+
+    // Delete a log
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLog(@PathVariable Long id) {
         waterLogService.deleteLog(id);
-        return "redirect:/logs";
+        return ResponseEntity.noContent().build();
     }
 }

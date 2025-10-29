@@ -2,12 +2,14 @@ package com.example.Irrigation_System.controller;
 
 import com.example.Irrigation_System.entity.Field;
 import com.example.Irrigation_System.service.FieldService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/fields")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/fields")
+@CrossOrigin(origins = "*")
 public class FieldController {
 
     private final FieldService fieldService;
@@ -16,47 +18,37 @@ public class FieldController {
         this.fieldService = fieldService;
     }
 
-    // Show all fields
+    // Get all fields
     @GetMapping
-    public String listFields(Model model) {
-        model.addAttribute("fields", fieldService.getAllFields());
-        return "fields/list"; // --> templates/fields/list.html
+    public List<Field> getAllFields() {
+        return fieldService.getAllFields();
     }
 
-    // Show form to add new field
-    @GetMapping("/new")
-    public String showAddForm(Model model) {
-        model.addAttribute("field", new Field());
-        return "fields/add"; // --> templates/fields/add.html
+    // Get field by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Field> getFieldById(@PathVariable Long id) {
+        return fieldService.getFieldById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Save new field
+    // Add new field
     @PostMapping
-    public String saveField(@ModelAttribute("field") Field field) {
-        fieldService.saveField(field);
-        return "redirect:/fields";
+    public Field addField(@RequestBody Field field) {
+        return fieldService.saveField(field);
     }
 
-    // Show edit form
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Field field = fieldService.getFieldById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid field ID: " + id));
-        model.addAttribute("field", field);
-        return "fields/edit"; // --> templates/fields/edit.html
-    }
-
-    // Update field
-    @PostMapping("/update/{id}")
-    public String updateField(@PathVariable Long id, @ModelAttribute Field updatedField) {
-        fieldService.updateField(id, updatedField);
-        return "redirect:/fields";
+    // Update existing field
+    @PutMapping("/{id}")
+    public ResponseEntity<Field> updateField(@PathVariable Long id, @RequestBody Field updatedField) {
+        Field field = fieldService.updateField(id, updatedField);
+        return (field != null) ? ResponseEntity.ok(field) : ResponseEntity.notFound().build();
     }
 
     // Delete field
-    @GetMapping("/delete/{id}")
-    public String deleteField(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteField(@PathVariable Long id) {
         fieldService.deleteField(id);
-        return "redirect:/fields";
+        return ResponseEntity.noContent().build();
     }
 }

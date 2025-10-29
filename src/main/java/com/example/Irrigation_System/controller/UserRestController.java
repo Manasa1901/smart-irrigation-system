@@ -10,15 +10,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*") // allows Postman or frontend to access API
+@CrossOrigin(origins = "*") // allow Postman or frontend access
 public class UserRestController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserRestController(UserService userService) {
+        this.userService = userService;
+    }
 
     // ✅ Register new user (POST)
     @PostMapping("/register")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
         User savedUser = userService.saveUser(user);
         return ResponseEntity.ok(savedUser);
     }
@@ -30,26 +34,18 @@ public class UserRestController {
         return ResponseEntity.ok(users);
     }
 
-    // ✅ Get single user by ID (GET)
+    // ✅ Get user by ID (GET)
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
     // ✅ Update user (PUT)
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         User user = userService.updateUser(id, updatedUser);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
     // ✅ Delete user (DELETE)
