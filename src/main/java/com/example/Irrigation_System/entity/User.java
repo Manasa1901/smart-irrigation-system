@@ -1,8 +1,6 @@
 package com.example.Irrigation_System.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,13 +18,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(min = 3, max = 35)
     private String username;
-
-    @NotBlank(message = "Password is required")
-    @Size(min = 6)
-    @Column(nullable = false)
+    private String email;
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

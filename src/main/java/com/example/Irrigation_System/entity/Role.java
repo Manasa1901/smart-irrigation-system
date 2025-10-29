@@ -1,7 +1,6 @@
 package com.example.Irrigation_System.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -17,7 +16,5 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Role name is required")
-    @Column(unique = true, nullable = false)
     private String name;
 }
